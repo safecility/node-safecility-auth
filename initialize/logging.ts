@@ -7,6 +7,7 @@ export interface GeneralLogger {
   info(json: any, message?: string): void;
   debug(json: any, message?: string): void;
   error(json: any, message?: string): void;
+  warn(json: any, message?: string): void;
 }
 
 export class ConsoleLogger implements GeneralLogger {
@@ -20,6 +21,10 @@ export class ConsoleLogger implements GeneralLogger {
 
   info(json: any, message?: string): void {
     console.log(json, message);
+  }
+
+  warn(json: any, message?: string): void {
+    console.log("warn: " + json, message);
   }
 
 }
