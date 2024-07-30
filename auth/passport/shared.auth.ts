@@ -30,7 +30,7 @@ export function passportSerializer(passport: PassportStatic) {
             }
 
             const company = companySnapshot.docs[0].data() as Company;
-            logger.debug("getting user views", company);
+            logger.debug(company, "getting user views");
             fsUser.AuthViews = UserViews(fsUser, company);
             //no need to pass any unauthorized views forward
             fsUser.Views = undefined;
