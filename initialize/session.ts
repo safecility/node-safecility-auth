@@ -1,5 +1,4 @@
 import session, {SessionOptions} from 'express-session';
-import passport from 'passport';
 import cors from 'cors';
 import { join } from "path";
 
@@ -55,10 +54,6 @@ export function newSession(app: express.Application) {
   }
 
   app.use(session(sessionConfig));
-
-  // start passport
-  app.use(passport.initialize());
-  app.use(passport.session());
   // The cors function is function cors(options, req, res, next)
   let corsAccess = cors();
   app.use(corsAccess);

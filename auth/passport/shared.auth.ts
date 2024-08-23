@@ -3,14 +3,28 @@ import { PassportStatic } from "passport";
 import { getCompanyViews, getUserByEmail } from "../../initialize/firestore";
 import { getLogging } from "../../initialize/logging";
 import { User, UserViews } from "./auth.model";
+import express from "express";
 
 const logger = getLogging();
 
-export function passportSerializer(passport: PassportStatic) {
+export function initPassport(app: express.Application ,passport: PassportStatic) {
+  // start passport
+  app.use(passport.initialize());
+  app.use(passport.session());
+  passportSerializer(passport);
+}
+
+function passportSerializer(passport: PassportStatic) {
+
+  passport.deserializeUser((obj: any, cb) => {
+    console.log("deserializing", obj)
+    cb(null, obj);
+  });
+
   /*
   The auth flow then calls serializeUser which looks up the email against the db
   This creates the user object used by the session
-*/
+  */
   passport.serializeUser((user: any, cb: (err: any, result?: any) => void) => {
 
     getUserByEmail(user.email.toLowerCase()).subscribe({
@@ -39,10 +53,6 @@ export function passportSerializer(passport: PassportStatic) {
         cb(err);
       }
     });
-  });
-
-  passport.deserializeUser((obj: any, cb) => {
-    cb(null, obj);
   });
 
 }

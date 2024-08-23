@@ -18,11 +18,6 @@ async function startServer() {
     newSession(app);
     passportSerializer(passport);
 
-    const frontend = "./dist/frontend/browser";
-
-    app.use('/', express.static(frontend));
-    app.use('/login', express.static(frontend));
-
     app.use('/auth', authRouter);
 
     const PORT = configuration.get('PORT') || 8080;
