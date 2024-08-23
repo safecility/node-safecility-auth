@@ -12,28 +12,29 @@ export interface View {
 }
 
 export interface Company {
-    CompanyUID: string
-    Views: Array<View>
+    uid: string
+    name: string
+    views: Array<View>
 }
 
 export interface User {
-    Email: string
-    CompanyUID: string
-    Roles: Array<string>
-    Views?: Array<string>
-    AuthViews: Array<View>
+    email: string
+    companyUID: string
+    roles: Array<string>
+    views?: Array<string>
+    authViews: Array<View>
 }
 
 export function UserViews(user: User, company: Company): View[] {
-    if (!user.Views) {
-        user.Views = company.Views.map( v => v.ViewUID);
+    if (!user.views) {
+        user.views = company.views.map( v => v.ViewUID);
     }
 
-    return company.Views.reduce( (p, cv): Array<View> => {
+    return company.views.reduce( (p, cv): Array<View> => {
         if (!cv.Active)
             return p;
         if (!cv.Roles) {
-            user.Views?.forEach( uv => {
+            user.views?.forEach( uv => {
                 if (uv === cv.ViewUID) {
                     p.push(sanitizeView(cv));
                     return;
@@ -43,9 +44,9 @@ export function UserViews(user: User, company: Company): View[] {
         }
 
         cv.Roles.forEach( cr => {
-            user.Roles?.forEach( ur => {
+            user.roles?.forEach( ur => {
                 if (ur === cr) {
-                    user.Views?.forEach( uv => {
+                    user.views?.forEach( uv => {
                         if (uv === cv.ViewUID) {
                             p.push(sanitizeView(cv));
                             return p;

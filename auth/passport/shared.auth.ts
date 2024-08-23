@@ -2,7 +2,7 @@ import { PassportStatic } from "passport";
 
 import { getCompanyByUID, getUserByEmail } from "../../initialize/firestore";
 import { getLogging } from "../../initialize/logging";
-import {Company, User, UserViews} from "./auth.model";
+import {User, UserViews} from "./auth.model";
 
 const logger = getLogging();
 
@@ -14,26 +14,14 @@ export function passportSerializer(passport: PassportStatic) {
   passport.serializeUser((user: any, cb: (err: any, result?: any) => void) => {
 
     getUserByEmail(user.email.toLowerCase()).subscribe({
-      next: (userSnapshot) => {
-        if (userSnapshot.docs.length==0) {
-          cb(new Error("User not found"));
-          return;
-        }
+      next: (fsUser: User | undefined) => {
 
-        const fsUser = userSnapshot.docs[0].data() as User
-
-        getCompanyByUID(fsUser.CompanyUID).subscribe({
-          next: (companySnapshot) => {
-            if (companySnapshot.docs.length==0) {
-              cb(new Error("User's company not found"));
-              return
-            }
-
-            const company = companySnapshot.docs[0].data() as Company;
+        getCompanyByUID(fsUser.companyUID).subscribe({
+          next: (company) => {
             logger.debug(company, "getting user views");
-            fsUser.AuthViews = UserViews(fsUser, company);
+            fsUser.authViews = UserViews(fsUser, company);
             //no need to pass any unauthorized views forward
-            fsUser.Views = undefined;
+            fsUser.views = undefined;
 
             cb(null, fsUser);
           },
