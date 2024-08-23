@@ -15,18 +15,17 @@ export function passportSerializer(passport: PassportStatic) {
 
     getUserByEmail(user.email.toLowerCase()).subscribe({
       next: (fsUser: User | undefined) => {
-
         getCompanyViews(fsUser.companyUID).subscribe({
           next: (companyViews) => {
             if (!companyViews) {
               logger.warn(fsUser.companyUID, "could not get company")
-              cb("could not get company");
+              cb("could not get company for user: " + fsUser.email);
               return;
             }
             fsUser.authViews = UserViews(fsUser, companyViews);
+            console.log(fsUser.authViews, "user views");
             //no need to pass any unauthorized views forward
             fsUser.views = undefined;
-
             cb(null, fsUser);
           },
           error: err => {
@@ -45,7 +44,5 @@ export function passportSerializer(passport: PassportStatic) {
   passport.deserializeUser((obj: any, cb) => {
     cb(null, obj);
   });
-
-
 
 }

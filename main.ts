@@ -16,7 +16,7 @@ async function startServer() {
     const app: express.Application = express();
 
     newSession(app);
-    passportSerializer(passport)
+    passportSerializer(passport);
 
     const frontend = "./dist/frontend/browser";
 

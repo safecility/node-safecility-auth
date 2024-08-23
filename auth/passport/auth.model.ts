@@ -7,7 +7,7 @@ export interface Group {
 }
 
 export interface View {
-    viewUID: string;
+    uid: string;
     app:     string;
     active?:  boolean;
     groups?: Array<Group>
@@ -34,7 +34,7 @@ export function UserViews(user: User, authViews: View[]): View[] {
         return [];
     }
     if (!user.views) {
-        user.views = authViews.map( v => v.viewUID);
+        user.views = authViews.map( v => v.uid);
     }
 
     return authViews.reduce( (p, cv): Array<View> => {
@@ -42,7 +42,7 @@ export function UserViews(user: User, authViews: View[]): View[] {
             return p;
         if (!cv.roles) {
             user.views?.forEach( uv => {
-                if (uv === cv.viewUID) {
+                if (uv === cv.uid) {
                     p.push(sanitizeView(cv));
                     return;
                 }
@@ -54,7 +54,7 @@ export function UserViews(user: User, authViews: View[]): View[] {
             user.roles?.forEach( ur => {
                 if (ur === cr) {
                     user.views?.forEach( uv => {
-                        if (uv === cv.viewUID) {
+                        if (uv === cv.uid) {
                             p.push(sanitizeView(cv));
                             return p;
                         }
