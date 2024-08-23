@@ -1,10 +1,9 @@
 {
-  "name": "demo-client",
+  "name": "auth",
   "version": "1.0.0",
   "description": "a demo client for safecility",
   "main": "main.ts",
   "scripts": {
-    "rund": "ts-node-dev --respawn main.ts",
     "dev": "ts-node-dev --respawn main.ts",
     "run": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"

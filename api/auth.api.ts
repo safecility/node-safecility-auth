@@ -6,8 +6,6 @@ import { Response } from 'express';
 import { Session } from 'express-session';
 import { hasPassport } from "./auth.guard";
 import { getLogging } from "../initialize/logging";
-import { init as authInit } from "../auth/passport/auth.init";
-import {authInitGoogle} from "../auth/passport/google.auth";
 
 const logger = getLogging();
 
@@ -22,9 +20,6 @@ interface RedirectSession extends Session {
   redirectUrl: string
 }
 
-authInit()
-authInitGoogle(passport)
-
 authRouter.get(
   '/',
   hasPassport,
@@ -36,7 +31,7 @@ authRouter.get(
 authRouter.get(
     '/user',
     (req, res: Response) => {
-        if (!req.user) {
+        if (req.isUnauthenticated()) {
             res.sendStatus(401);
             return;
         }
