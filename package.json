@@ -1,5 +1,5 @@
 {
-  "name": "demo-client",
+  "name": "auth",
   "version": "1.0.0",
   "description": "a demo client for safecility",
   "main": "main.ts",
