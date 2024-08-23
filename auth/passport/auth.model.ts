@@ -1,14 +1,17 @@
+import {getLogging} from "../../initialize/logging";
+
+const logger = getLogging();
 
 export interface Group {
-    Roles: Array<string>
+    roles: Array<string>
 }
 
 export interface View {
-    ViewUID: string;
-    App:     string;
-    Active?:  boolean;
-    Groups?: Array<Group>
-    Roles?: Array<string>
+    viewUID: string;
+    app:     string;
+    active?:  boolean;
+    groups?: Array<Group>
+    roles?: Array<string>
 }
 
 export interface Company {
@@ -25,17 +28,21 @@ export interface User {
     authViews: Array<View>
 }
 
-export function UserViews(user: User, company: Company): View[] {
+export function UserViews(user: User, authViews: View[]): View[] {
+    if (!authViews) {
+        logger.warn(authViews, "we need auth views");
+        return [];
+    }
     if (!user.views) {
-        user.views = company.views.map( v => v.ViewUID);
+        user.views = authViews.map( v => v.viewUID);
     }
 
-    return company.views.reduce( (p, cv): Array<View> => {
-        if (!cv.Active)
+    return authViews.reduce( (p, cv): Array<View> => {
+        if (!cv.active)
             return p;
-        if (!cv.Roles) {
+        if (!cv.roles) {
             user.views?.forEach( uv => {
-                if (uv === cv.ViewUID) {
+                if (uv === cv.viewUID) {
                     p.push(sanitizeView(cv));
                     return;
                 }
@@ -43,11 +50,11 @@ export function UserViews(user: User, company: Company): View[] {
             return p;
         }
 
-        cv.Roles.forEach( cr => {
+        cv.roles.forEach( cr => {
             user.roles?.forEach( ur => {
                 if (ur === cr) {
                     user.views?.forEach( uv => {
-                        if (uv === cv.ViewUID) {
+                        if (uv === cv.viewUID) {
                             p.push(sanitizeView(cv));
                             return p;
                         }
