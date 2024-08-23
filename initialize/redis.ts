@@ -1,7 +1,7 @@
-import {createClient, RedisClientOptions, RedisDefaultModules} from 'redis';
+import { createClient, RedisClientOptions } from 'redis';
 import { configuration } from './config';
 import { getLogging } from "./logging";
-import {RedisClientType as _RedisClientType} from "@redis/client/dist/lib/client";
+// import {RedisClientType as _RedisClientType} from "@redis/client/dist/lib/client";
 
 const logger = getLogging();
 

@@ -1,11 +1,9 @@
-import { Passport } from 'passport';
 import { NextFunction, Response, Request } from "express";
 import { getLogging } from "../initialize/logging";
 
 const logger = getLogging();
 
 export function hasPassport(req: Request, res: Response, next: NextFunction) {
-
   if (!req.isAuthenticated()) {
     logger.info({redirect: req.url}, 'req url');
     const redirectIndex = req.url.indexOf('?redirect=');
@@ -17,5 +15,5 @@ export function hasPassport(req: Request, res: Response, next: NextFunction) {
     res.sendStatus(401);
     return;
   }
-
+  next();
 }

@@ -5,9 +5,9 @@ import bodyParser from 'body-parser';
 import { Response } from 'express';
 import { Session } from 'express-session';
 import { hasPassport } from "./auth.guard";
-import { authInitGoogle } from "../auth/passport/google.auth";
-import { passportSerializer } from "../auth/passport/shared.auth";
 import { getLogging } from "../initialize/logging";
+import { init as authInit } from "../auth/passport/auth.init";
+import {authInitGoogle} from "../auth/passport/google.auth";
 
 const logger = getLogging();
 
@@ -22,13 +22,13 @@ interface RedirectSession extends Session {
   redirectUrl: string
 }
 
-passportSerializer(passport);
-authInitGoogle(passport);
+authInit()
+authInitGoogle(passport)
 
 authRouter.get(
   '/',
   hasPassport,
-  (req, res: Response) => {
+  (_, res: Response) => {
     res.sendStatus(200);
   }
 );

@@ -1,5 +1,5 @@
 import { configuration } from "./config";
-import Logger from "bunyan";
+// import Logger from "bunyan";
 import bunyan from "bunyan";
 import { LoggingBunyan } from '@google-cloud/logging-bunyan';
 
