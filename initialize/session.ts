@@ -13,6 +13,43 @@ import {firestoreDB} from "./firestore";
 
 const logger = getLogging();
 
+export function enableCors(app: express.Application) {
+  app.use(cors());
+}
+
+/*
+This doesn't seem all that obvious
+ */
+export function preflightCors(app: express.Application, allowlist: string | Array<string>) {
+
+  if (allowlist.length) {
+    // var corsOptionsDelegate = (req, callback) => {
+    //   var corsOptions;
+    //   if (allowlist.indexOf(req.header('Origin')) !== -1) {
+    //     corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+    //   } else {
+    //     corsOptions = { origin: false } // disable CORS for this request
+    //   }
+    //   callback(null, corsOptions) // callback expects two parameters: error and options
+    // }
+  }
+
+  const corsOptions = {
+    origin: allowlist,
+    optionsSuccessStatus: 200,
+    credentials: true,
+  };
+
+  let corsAccess = cors(corsOptions);
+  app.use(corsAccess);
+
+  const preflight = {
+    origin: allowlist,
+  };
+
+  app.options('*', cors(preflight))
+}
+
 export function newSession(app: express.Application) {
   logger.info("starting session and passport");
 
@@ -54,9 +91,7 @@ export function newSession(app: express.Application) {
   }
 
   app.use(session(sessionConfig));
-  // The cors function is function cors(options, req, res, next)
-  let corsAccess = cors();
-  app.use(corsAccess);
+
 }
 
 export function getFrontend(): string {

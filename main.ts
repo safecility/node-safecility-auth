@@ -1,9 +1,9 @@
 import express from "express";
-import { newSession } from "./initialize/session";
+import { newSession, preflightCors} from "./initialize/session";
 import { getLogging } from "./initialize/logging";
 import { authRouter } from "./api/auth.api";
 import { configuration } from "./initialize/config";
-import { passportSerializer } from "./auth/passport/shared.auth";
+import { initPassport } from "./auth/passport/shared.auth";
 import passport from "passport";
 
 const logger = getLogging();
@@ -16,9 +16,12 @@ async function startServer() {
     const app: express.Application = express();
 
     newSession(app);
-    passportSerializer(passport);
+    preflightCors(app, 'http://localhost:4200');
+    initPassport(app, passport);
 
     app.use('/auth', authRouter);
+
+
 
     const PORT = configuration.get('PORT') || 8080;
     app.listen(PORT, () => {

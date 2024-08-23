@@ -17,7 +17,6 @@ export function initPassport(app: express.Application ,passport: PassportStatic)
 function passportSerializer(passport: PassportStatic) {
 
   passport.deserializeUser((obj: any, cb) => {
-    console.log("deserializing", obj)
     cb(null, obj);
   });
 
@@ -37,7 +36,6 @@ function passportSerializer(passport: PassportStatic) {
               return;
             }
             fsUser.authViews = UserViews(fsUser, companyViews);
-            console.log(fsUser.authViews, "user views");
             //no need to pass any unauthorized views forward
             fsUser.views = undefined;
             cb(null, fsUser);

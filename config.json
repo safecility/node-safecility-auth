@@ -1,8 +1,8 @@
 {
   "APP": "auth",
-  "PORT": 4000,
+  "PORT": 8040,
   "SESSION_SECURE": true,
-  "SESSION_SECRET": "replace-1163",
+  "SESSION_SECRET": "replace-1162",
   "GCLOUD_PROJECT": "safecility-test",
 
   "LOG_LEVEL": "debug",
