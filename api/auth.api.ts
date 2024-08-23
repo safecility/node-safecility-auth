@@ -7,7 +7,6 @@ import { Session } from 'express-session';
 import { hasPassport } from "./auth.guard";
 import { getLogging } from "../initialize/logging";
 import { init as authInit } from "../auth/passport/auth.init";
-import {authInitGoogle} from "../auth/passport/google.auth";
 
 const logger = getLogging();
 
@@ -23,7 +22,6 @@ interface RedirectSession extends Session {
 }
 
 authInit()
-authInitGoogle(passport)
 
 authRouter.get(
   '/',

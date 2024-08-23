@@ -1,6 +1,6 @@
 import {Filter, Firestore} from "@google-cloud/firestore";
 import {fromPromise} from "rxjs/internal/observable/innerFrom";
-import {Company, User} from "../auth/passport/auth.model";
+import {Company, User, View} from "../auth/passport/auth.model";
 import {map, Observable} from "rxjs";
 
 
@@ -22,6 +22,17 @@ export function getUserViews(user: User) {
         (dd) => {
             return dd
         }
+    )
+}
+
+export function getCompanyViews(uid: string): Observable<Array<View>> {
+    const viewPath = `company/${uid}/views`
+    return fromPromise(
+        firestoreDB.collection(viewPath).get()).pipe(map ( qs => {
+            return qs.docs.map( d => {
+                return d.data() as View
+            })
+        })
     )
 }
 
